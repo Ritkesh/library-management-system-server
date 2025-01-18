@@ -10,12 +10,12 @@ import java.util.List;
 @Setter
 @Entity
 
-@Table(name = "app_user")
-public class User {
+@Table(name = "book")
+
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id ;
-    private String userName;
-    private String password;
-    private List<String> roles;
+    private Integer id;
+    private String bookName;
+    private String authorName;
 }
