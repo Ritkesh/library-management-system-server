@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://dpg-cu4koql6l47c73b59oh0-a.singapore-postgres.render.com/library_management_uxkv
+    username: library_management_uxkv_user
+    password: q6OnFcuEfQ1ahU60h1p9N7ekGtTJJi8q
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+ port: 8081
