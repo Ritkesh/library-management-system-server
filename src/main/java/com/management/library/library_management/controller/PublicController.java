@@ -11,13 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 
 @RestController
-@RequestMapping("/public")
+@RequestMapping("/rest")
 @Slf4j
 
 public class PublicController {
@@ -39,13 +41,18 @@ public class PublicController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
     @PostMapping("login")
     public ResponseEntity<?>logIn(@RequestBody User user){
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword()));
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserName());
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
-            return new ResponseEntity<>(jwt,HttpStatus.OK);
+            User userObject = userService.findUserByUserName(user.getUserName());
+            Map<String, String> response = new HashMap<>();
+            response.put("token", jwt);
+            if (userObject.getRoles()!=null && userObject.getRoles().size()>0 && userObject.getRoles().contains("ADMIN")) response.put("role", "ADMIN");
+            return ResponseEntity.ok(response);
         } catch (Exception e){
             log.error("Exception occurred while generating token");
             return new ResponseEntity<>("Incorrect user name password",HttpStatus.BAD_REQUEST);
