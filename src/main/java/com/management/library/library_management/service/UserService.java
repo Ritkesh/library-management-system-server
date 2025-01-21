@@ -1,6 +1,7 @@
 package com.management.library.library_management.service;
 
 import com.management.library.library_management.entity.User;
+import com.management.library.library_management.entity.UserRole;
 import com.management.library.library_management.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,7 +28,7 @@ public class UserService {
     public void saveNewAdminUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if(user.getRoles()== null){
-            user.setRoles(Arrays.asList("USER","ADMIN"));
+            user.setRoles(Arrays.asList(UserRole.ADMIN.name(),UserRole.USER.name()));
         }
         userRepository.save(user);
     }
@@ -40,19 +41,7 @@ public class UserService {
         return userList;
 
     }
-    public User findUserById(Integer id){
-
-        return userRepository.findById(id).orElse(null);
-    }
-    public void deleteById(Integer id){
-        userRepository.deleteById(id);
-
-    }
     public User findUserByUserName(String name){
         return userRepository.findByuserName(name);
-    }
-    public void deleteByUserName(String userName){
-        userRepository.deleteByUserName(userName);
-
     }
 }
