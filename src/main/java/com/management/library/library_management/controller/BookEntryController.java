@@ -1,7 +1,10 @@
 package com.management.library.library_management.controller;
 
 import com.management.library.library_management.entity.Book;
+import com.management.library.library_management.entity.BookStatus;
+import com.management.library.library_management.entity.IssueReturnDetails;
 import com.management.library.library_management.entity.User;
+import com.management.library.library_management.service.BookIssueService;
 import com.management.library.library_management.service.BookService;
 import com.management.library.library_management.utils.CommonUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +21,11 @@ import java.util.List;
 @Slf4j
 public class BookEntryController {
     @Autowired
-    BookService bookService;
+    private BookService bookService;
     @Autowired
-    CommonUtils commonUtils;
+    private CommonUtils commonUtils;
+    @Autowired
+    private BookIssueService bookIssueService;
     @PostMapping("/entry")
     public ResponseEntity<?> bookEntry(@RequestBody Book book, HttpServletRequest request){
         try {
@@ -28,6 +33,7 @@ public class BookEntryController {
              User user = commonUtils.getApplicationUser(request);
 
             if(user.getRoles().contains("ADMIN")){
+                book.setStatus(BookStatus.AVAILABLE.name());
                 bookService.saveBook(book);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
@@ -71,8 +77,6 @@ public class BookEntryController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
-
     @GetMapping("/search")
     public ResponseEntity<?> searchBooks(
             @RequestParam(required = false) String bookName,
@@ -86,6 +90,17 @@ public class BookEntryController {
             log.error("Error while searching books: {}", e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/issue-book")
+    public ResponseEntity<?> issueBook(@RequestBody IssueReturnDetails issueReturnDetails){
+        try {
+            bookIssueService.saveIssuedBook(issueReturnDetails);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(Exception e){
+            log.error("Error while issuing books: {}", e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }
