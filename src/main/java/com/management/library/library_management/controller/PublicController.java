@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/public")
+@RequestMapping("/rest")
 @Slf4j
 
 public class PublicController {
@@ -56,7 +56,7 @@ public class PublicController {
             if(userObj.getRoles()!=null && !(userObj.getRoles().isEmpty()) && userObj.getRoles().contains(UserRole.ADMIN.name())){
                 response.put("role",UserRole.ADMIN.name());
             }
-            return ResponseEntity.ok(jwt);
+            return ResponseEntity.ok(response);
         } catch (Exception e){
             log.error("Exception occurred while generating token");
             return new ResponseEntity<>("Incorrect user name password",HttpStatus.BAD_REQUEST);
