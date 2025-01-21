@@ -1,6 +1,7 @@
 package com.management.library.library_management.service;
 
 import com.management.library.library_management.entity.Book;
+import com.management.library.library_management.entity.IssueReturnDetails;
 import com.management.library.library_management.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,10 @@ public class BookService {
 
     public Book findBookById(Integer id) {
         return bookRepository.findById(id).orElse(null);
+    }
+
+    public List<Book> getAllBooksByStatus(String status) {
+        return bookRepository.findByStatus(status);
     }
 
 
