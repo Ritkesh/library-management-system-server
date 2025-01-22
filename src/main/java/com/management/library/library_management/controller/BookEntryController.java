@@ -113,5 +113,15 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @GetMapping("/get-book")
+    public ResponseEntity<?>getBookById(@RequestBody Book book){
+        try{
+           Book bookObj =  bookService.findBookById(book.getId());
+            return new ResponseEntity<>(bookObj,HttpStatus.OK);
+        }catch(Exception e){
+            log.info("Error while getting book",e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
 }
