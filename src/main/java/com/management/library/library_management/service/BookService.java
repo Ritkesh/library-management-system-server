@@ -1,6 +1,7 @@
 package com.management.library.library_management.service;
 
 import com.management.library.library_management.entity.Book;
+import com.management.library.library_management.entity.BookStatus;
 import com.management.library.library_management.entity.IssueReturnDetails;
 import com.management.library.library_management.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class BookService {
 
     public void saveBook(Book book) {
         if(book.getStatus() == null){
-            book.setStatus("Available");
+            book.setStatus(BookStatus.AVAILABLE.name());
         }
 
         bookRepository.save(book);

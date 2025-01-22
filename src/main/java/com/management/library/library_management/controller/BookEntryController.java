@@ -27,54 +27,52 @@ public class BookEntryController {
     private CommonUtils commonUtils;
     @Autowired
     private BookIssueService bookIssueService;
+
     @PostMapping("/entry")
-    public ResponseEntity<?> bookEntry(@RequestBody Book book, HttpServletRequest request){
+    public ResponseEntity<?> bookEntry(@RequestBody Book book, HttpServletRequest request) {
         try {
 
-             User user = commonUtils.getApplicationUser(request);
+            User user = commonUtils.getApplicationUser(request);
 
-            if(user.getRoles().contains("ADMIN")){
+            if (user.getRoles().contains("ADMIN")) {
                 book.setStatus(BookStatus.AVAILABLE.name());
                 bookService.saveBook(book);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
-        }catch (Error e)
-        {
-            log.error("Error while book entry",e.getMessage());
+        } catch (Error e) {
+            log.error("Error while book entry", e.getMessage());
         }
 
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
     }
+
     @PutMapping("/update-book-detail")
-    public ResponseEntity<?> updateBookDetail(@RequestBody Book book,HttpServletRequest request){
-        try{
+    public ResponseEntity<?> updateBookDetail(@RequestBody Book book, HttpServletRequest request) {
+        try {
             User user = commonUtils.getApplicationUser(request);
-            if(user.getRoles().contains("ADMIN")){
-                Book old = bookService.findBookById(book.getId());
-                if(old!=null){
-                    old.setBookName(book.getBookName());
-                    old.setAuthorName(book.getAuthorName());
-                    bookService.saveBook(old);
-                    return new ResponseEntity<>(HttpStatus.OK);
-                }
+            if (user.getRoles().contains("ADMIN")) {
+                bookService.saveBook(book);
+                return new ResponseEntity<>(HttpStatus.OK);
+
             }
 
-        } catch (Exception e){
-            log.error("Error occurred while updating book details",e.getMessage());
+        } catch (Exception e) {
+            log.error("Error occurred while updating book details", e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
+
     @GetMapping("/book-list")
-    public ResponseEntity<?> showBookList(){
-        try{
-            List<Book>bookList = bookService.getAllBook();
+    public ResponseEntity<?> showBookList() {
+        try {
+            List<Book> bookList = bookService.getAllBook();
             bookList.sort(Comparator.comparing(Book::getId));
-            if(!bookList.isEmpty()){
-                return new ResponseEntity<>(bookList,HttpStatus.OK);
+            if (!bookList.isEmpty()) {
+                return new ResponseEntity<>(bookList, HttpStatus.OK);
             }
-        } catch (Exception e){
-            log.error("Error while getting bookList",e.getMessage());
+        } catch (Exception e) {
+            log.error("Error while getting bookList", e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -95,31 +93,33 @@ public class BookEntryController {
     }
 
     @PostMapping("/issue-book")
-    public ResponseEntity<?> issueBook(@RequestBody IssueReturnDetails issueReturnDetails){
+    public ResponseEntity<?> issueBook(@RequestBody IssueReturnDetails issueReturnDetails) {
         try {
             bookIssueService.saveIssuedBook(issueReturnDetails);
             return new ResponseEntity<>(HttpStatus.OK);
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("Error while issuing books: {}", e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
     @PostMapping("/delete-book")
-    public ResponseEntity<?>deleteBook(@RequestBody Book book){
+    public ResponseEntity<?> deleteBook(@RequestBody Book book) {
         try {
             bookService.deleteBookById(book.getId());
-        } catch (Exception e){
-            log.error("Error while deleting book",e.getMessage());
+        } catch (Exception e) {
+            log.error("Error while deleting book", e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PostMapping("/get-book")
-    public ResponseEntity<?>getBookById(@RequestBody Book book){
-        try{
-           Book bookObj =  bookService.findBookById(book.getId());
-            return new ResponseEntity<>(bookObj,HttpStatus.OK);
-        }catch(Exception e){
-            log.info("Error while getting book",e.getMessage());
+    public ResponseEntity<?> getBookById(@RequestBody Book book) {
+        try {
+            Book bookObj = bookService.findBookById(book.getId());
+            return new ResponseEntity<>(bookObj, HttpStatus.OK);
+        } catch (Exception e) {
+            log.info("Error while getting book", e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
