@@ -52,6 +52,7 @@ public class BookService {
     }
     public List<BookDto> getBookList() {
         return bookRepository.findAll().stream()
+                .filter(book -> book.getStatus().equals(BookStatus.AVAILABLE))
                 .map(book -> new BookDto(book.getBookName(), book.getId()))
                 .toList();
     }
