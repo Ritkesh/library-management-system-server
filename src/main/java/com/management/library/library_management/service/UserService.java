@@ -1,6 +1,7 @@
 package com.management.library.library_management.service;
 
 import com.management.library.library_management.entity.User;
+import com.management.library.library_management.entity.UserDto;
 import com.management.library.library_management.entity.UserRole;
 import com.management.library.library_management.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,10 @@ public class UserService {
     }
     public User findUserByUserName(String name){
         return userRepository.findByuserName(name);
+    }
+    public List<UserDto> findALlUser(){
+        return userRepository.findAll().stream()
+                .map(user->new UserDto(user.getId(),user.getUserName()))
+                .toList();
     }
 }
