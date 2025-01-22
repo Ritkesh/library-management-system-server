@@ -154,8 +154,19 @@ public class BookEntryController {
     @GetMapping("/all-book")
     public ResponseEntity<List<BookDto>>getAllBooks(){
         try {
-            List<BookDto>userDtoList = bookService.getBookList();
-            return new ResponseEntity<>(userDtoList,HttpStatus.OK);
+            List<BookDto>bookDtoList = bookService.getBookList();
+            return new ResponseEntity<>(bookDtoList,HttpStatus.OK);
+        } catch (Exception e){
+            log.info("Error while fetching user",e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/return-book")
+    public ResponseEntity<?> getBook(IssueReturnDetails issueReturnDetails){
+        try {
+            BookDto bookObj = bookService.getIssuedBookById(issueReturnDetails.getId());
+            return new ResponseEntity<>(bookObj,HttpStatus.OK);
         } catch (Exception e){
             log.info("Error while fetching user",e.getMessage());
         }
