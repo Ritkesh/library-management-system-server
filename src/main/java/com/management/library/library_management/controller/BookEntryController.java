@@ -113,7 +113,7 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @GetMapping("/get-book")
+    @PostMapping("/get-book")
     public ResponseEntity<?>getBookById(@RequestBody Book book){
         try{
            Book bookObj =  bookService.findBookById(book.getId());
