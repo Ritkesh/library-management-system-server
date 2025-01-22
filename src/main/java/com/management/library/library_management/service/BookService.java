@@ -33,6 +33,9 @@ public class BookService {
     public List<Book> getAllBooksByStatus(String status) {
         return bookRepository.findByStatus(status);
     }
+    public void deleteBookById(Integer id){
+         bookRepository.deleteById(id);
+    }
 
 
     public List<Book> searchBooks(String bookName, String authorName) {
