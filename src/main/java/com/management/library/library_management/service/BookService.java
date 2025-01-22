@@ -1,6 +1,7 @@
 package com.management.library.library_management.service;
 
 import com.management.library.library_management.entity.Book;
+import com.management.library.library_management.entity.BookDto;
 import com.management.library.library_management.entity.BookStatus;
 import com.management.library.library_management.entity.IssueReturnDetails;
 import com.management.library.library_management.repository.BookRepository;
@@ -48,5 +49,10 @@ public class BookService {
             return bookRepository.findByAuthorNameContainingIgnoreCase(authorName.trim());
         }
         return Collections.emptyList();
+    }
+    public List<BookDto> getBookList() {
+        return bookRepository.findAll().stream()
+                .map(book -> new BookDto(book.getBookName(), book.getId()))
+                .toList();
     }
 }

@@ -1,11 +1,9 @@
 package com.management.library.library_management.controller;
 
-import com.management.library.library_management.entity.Book;
-import com.management.library.library_management.entity.BookStatus;
-import com.management.library.library_management.entity.IssueReturnDetails;
-import com.management.library.library_management.entity.User;
+import com.management.library.library_management.entity.*;
 import com.management.library.library_management.service.BookIssueService;
 import com.management.library.library_management.service.BookService;
+import com.management.library.library_management.service.UserService;
 import com.management.library.library_management.utils.CommonUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +25,8 @@ public class BookEntryController {
     private CommonUtils commonUtils;
     @Autowired
     private BookIssueService bookIssueService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/entry")
     public ResponseEntity<?> bookEntry(@RequestBody Book book, HttpServletRequest request) {
@@ -123,5 +123,26 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    @GetMapping("/user")
+    public ResponseEntity<List<UserDto>>getAllUser(){
+        try {
+            List<UserDto>userDtoList = userService.findALlUser();
+            return new ResponseEntity<>(userDtoList,HttpStatus.OK);
+        } catch (Exception e){
+            log.info("Error while fetching user",e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @GetMapping("/all-book")
+    public ResponseEntity<List<BookDto>>getAllBooks(){
+        try {
+            List<BookDto>userDtoList = bookService.getBookList();
+            return new ResponseEntity<>(userDtoList,HttpStatus.OK);
+        } catch (Exception e){
+            log.info("Error while fetching user",e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
 }
