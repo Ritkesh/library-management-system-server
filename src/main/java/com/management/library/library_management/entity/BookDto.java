@@ -12,7 +12,7 @@ public class BookDto implements Serializable {
     private String bookName;
     private Integer id;
 
-    public BookDto(String bookName, Integer id) {
+    public BookDto(Integer id,String bookName) {
         this.bookName = bookName;
         this.id = id;
     }

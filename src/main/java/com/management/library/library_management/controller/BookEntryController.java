@@ -1,10 +1,12 @@
 package com.management.library.library_management.controller;
 
 import com.management.library.library_management.entity.*;
+import com.management.library.library_management.repository.BookIssueRepository;
 import com.management.library.library_management.service.BookIssueService;
 import com.management.library.library_management.service.BookService;
 import com.management.library.library_management.service.UserService;
 import com.management.library.library_management.utils.CommonUtils;
+import com.management.library.library_management.utils.Reference;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class BookEntryController {
     private BookIssueService bookIssueService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private BookIssueRepository bookIssueRepository;
 
     @PostMapping("/entry")
     public ResponseEntity<?> bookEntry(@RequestBody Book book, HttpServletRequest request) {
@@ -142,20 +146,20 @@ public class BookEntryController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     @GetMapping("/user")
-    public ResponseEntity<List<UserDto>>getAllUser(){
+    public ResponseEntity<?>getAllUser(){
         try {
-            List<UserDto>userDtoList = userService.findALlUser();
-            return new ResponseEntity<>(userDtoList,HttpStatus.OK);
+            List<Reference>userList = userService.findALlUser();
+            return new ResponseEntity<>(userList,HttpStatus.OK);
         } catch (Exception e){
             log.info("Error while fetching user",e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @GetMapping("/all-book")
-    public ResponseEntity<List<BookDto>>getAllBooks(){
+    public ResponseEntity<?>getAllBooks(){
         try {
-            List<BookDto>bookDtoList = bookService.getBookList();
-            return new ResponseEntity<>(bookDtoList,HttpStatus.OK);
+            List<Reference>bookList = bookService.getBookList();
+            return new ResponseEntity<>(bookList,HttpStatus.OK);
         } catch (Exception e){
             log.info("Error while fetching user",e.getMessage());
         }
@@ -163,10 +167,10 @@ public class BookEntryController {
     }
 
     @PostMapping("/return-book")
-    public ResponseEntity<?> getBook(IssueReturnDetails issueReturnDetails){
+    public ResponseEntity<?> getBook(@RequestBody IssueReturnDetails issueReturnDetails){
         try {
-            BookDto bookObj = bookService.getIssuedBookById(issueReturnDetails.getId());
-            return new ResponseEntity<>(bookObj,HttpStatus.OK);
+            IssueReturnDetails issueReturnDetails1 = bookService.getIssuedBookById(issueReturnDetails.getId());
+            return new ResponseEntity<>(issueReturnDetails1,HttpStatus.OK);
         } catch (Exception e){
             log.info("Error while fetching user",e.getMessage());
         }

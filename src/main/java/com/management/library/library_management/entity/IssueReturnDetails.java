@@ -1,4 +1,5 @@
 package com.management.library.library_management.entity;
+import com.management.library.library_management.utils.Reference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,14 +15,8 @@ public class IssueReturnDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @OneToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    private Reference user;
+    private Reference book;
 
     @Temporal(TemporalType.DATE)
     private Date issueDate;

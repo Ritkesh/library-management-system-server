@@ -1,10 +1,9 @@
 package com.management.library.library_management.service;
 
-import com.management.library.library_management.entity.Book;
-import com.management.library.library_management.entity.BookDto;
-import com.management.library.library_management.entity.BookStatus;
-import com.management.library.library_management.entity.IssueReturnDetails;
+import com.management.library.library_management.entity.*;
+import com.management.library.library_management.repository.BookIssueRepository;
 import com.management.library.library_management.repository.BookRepository;
+import com.management.library.library_management.utils.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +15,8 @@ import java.util.Optional;
 public class BookService {
     @Autowired
     BookRepository bookRepository;
+    @Autowired
+    BookIssueRepository bookIssueRepository;
 
     public void saveBook(Book book) {
         if(book.getStatus() == null){
@@ -51,16 +52,14 @@ public class BookService {
         }
         return Collections.emptyList();
     }
-    public List<BookDto> getBookList() {
+    public List<Reference> getBookList() {
         return bookRepository.findAll().stream()
                 .filter(book -> book.getStatus().equals(BookStatus.AVAILABLE.name()))
-                .map(book -> new BookDto(book.getBookName(), book.getId()))
+                .map(book -> new Reference( book.getId(),book.getBookName()))
                 .toList();
     }
-    public BookDto getIssuedBookById(Integer id) {
-        return bookRepository.findById(id)
-                .filter(book -> BookStatus.ISSUED.name().equals(book.getStatus())) // Check if status is AVAILABLE
-                .map(book -> new BookDto(book.getBookName(), book.getId()))
-                .orElseThrow(() -> new RuntimeException("Book not found or not available"));// Map to BookDto if the book is found and status matches
+    public IssueReturnDetails getIssuedBookById(Integer id) {
+        IssueReturnDetails issueReturnDetails =  bookIssueRepository.findById(id).orElse(null);
+        return null;
     }
 }
