@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/book")
@@ -76,6 +77,23 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @GetMapping("/return-book-list")
+    public ResponseEntity<?> showReturnBookList() {
+        try {
+            List<Book> bookList = bookService.getAllBook();
+            bookList.sort(Comparator.comparing(Book::getId));
+            List<Book> bookReturnList = bookList.stream()
+                    .filter(book -> book.getStatus().equals(BookStatus.ISSUED.name()))
+                    .collect(Collectors.toList());
+            if (!bookReturnList.isEmpty()) {
+                return new ResponseEntity<>(bookReturnList, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error while getting bookReturnList", e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
     @GetMapping("/search")
     public ResponseEntity<?> searchBooks(
