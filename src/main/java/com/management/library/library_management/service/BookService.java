@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class BookService {
@@ -55,5 +56,11 @@ public class BookService {
                 .filter(book -> book.getStatus().equals(BookStatus.AVAILABLE.name()))
                 .map(book -> new BookDto(book.getBookName(), book.getId()))
                 .toList();
+    }
+    public BookDto getIssuedBookById(Integer id) {
+        return bookRepository.findById(id)
+                .filter(book -> BookStatus.ISSUED.name().equals(book.getStatus())) // Check if status is AVAILABLE
+                .map(book -> new BookDto(book.getBookName(), book.getId()))
+                .orElseThrow(() -> new RuntimeException("Book not found or not available"));// Map to BookDto if the book is found and status matches
     }
 }
