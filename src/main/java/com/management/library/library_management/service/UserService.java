@@ -4,6 +4,7 @@ import com.management.library.library_management.entity.User;
 import com.management.library.library_management.entity.UserDto;
 import com.management.library.library_management.entity.UserRole;
 import com.management.library.library_management.repository.UserRepository;
+import com.management.library.library_management.utils.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,9 +46,9 @@ public class UserService {
     public User findUserByUserName(String name){
         return userRepository.findByuserName(name);
     }
-    public List<UserDto> findALlUser(){
+    public List<Reference> findALlUser(){
         return userRepository.findAll().stream()
-                .map(user->new UserDto(user.getId(),user.getUserName()))
+                .map(user->new Reference(user.getId(),user.getUserName()))
                 .toList();
     }
 }
