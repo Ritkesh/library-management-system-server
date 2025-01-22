@@ -19,5 +19,7 @@ public class Book {
     private Integer id;
     private String bookName;
     private String authorName;
+    private String genre;
+    private String description;
     private String status;
 }

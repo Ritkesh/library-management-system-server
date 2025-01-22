@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -68,6 +69,7 @@ public class BookEntryController {
     public ResponseEntity<?> showBookList(){
         try{
             List<Book>bookList = bookService.getAllBook();
+            bookList.sort(Comparator.comparing(Book::getId));
             if(!bookList.isEmpty()){
                 return new ResponseEntity<>(bookList,HttpStatus.OK);
             }
@@ -101,6 +103,15 @@ public class BookEntryController {
             log.error("Error while issuing books: {}", e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    @PostMapping("/delete-book")
+    public ResponseEntity<?>deleteBook(@RequestBody Book book){
+        try {
+            bookService.deleteBookById(book.getId());
+        } catch (Exception e){
+            log.error("Error while deleting book",e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
