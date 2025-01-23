@@ -15,7 +15,17 @@ public class IssueReturnDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "id", column = @Column(name = "user_id")),
+            @AttributeOverride(name = "name", column = @Column(name = "user_name"))
+    })
     private Reference user;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "id", column = @Column(name = "book_id")),
+            @AttributeOverride(name = "name", column = @Column(name = "book_name"))
+    })
     private Reference book;
 
     @Temporal(TemporalType.DATE)

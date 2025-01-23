@@ -8,7 +8,6 @@ import com.management.library.library_management.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +33,7 @@ public class PublicController {
     private JwtUtil jwtUtil;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-
+// for user sign up
     @PostMapping("/signup")
     public ResponseEntity<?>signUp(@RequestBody User user){
         try {
@@ -44,15 +43,16 @@ public class PublicController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    // for user login
     @PostMapping("/login")
     public ResponseEntity<?>logIn(@RequestBody User user){
         try {
             Map<String,String> response = new HashMap<>();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword()));
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserName());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getName(),user.getPassword()));
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getName());
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
             response.put("token",jwt);
-            User userObj = userService.findUserByUserName(user.getUserName());
+            User userObj = userService.findUserByUserName(user.getName());
             if(userObj.getRoles()!=null && !(userObj.getRoles().isEmpty()) && userObj.getRoles().contains(UserRole.ADMIN.name())){
                 response.put("role",UserRole.ADMIN.name());
             }

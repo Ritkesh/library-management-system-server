@@ -32,7 +32,7 @@ public class BookEntryController {
     private UserService userService;
     @Autowired
     private BookIssueRepository bookIssueRepository;
-
+    // for new book entry in inventory
     @PostMapping("/entry")
     public ResponseEntity<?> bookEntry(@RequestBody Book book, HttpServletRequest request) {
         try {
@@ -51,7 +51,7 @@ public class BookEntryController {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
     }
-
+// for updating the book details
     @PutMapping("/update-book-detail")
     public ResponseEntity<?> updateBookDetail(@RequestBody Book book, HttpServletRequest request) {
         try {
@@ -67,7 +67,7 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
-
+// to find the all the book from book inventory
     @GetMapping("/book-list")
     public ResponseEntity<?> showBookList() {
         try {
@@ -81,16 +81,13 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    // to show the book those are not returned yet.
     @GetMapping("/return-book-list")
     public ResponseEntity<?> showReturnBookList() {
         try {
-            List<Book> bookList = bookService.getAllBook();
-            bookList.sort(Comparator.comparing(Book::getId));
-            List<Book> bookReturnList = bookList.stream()
-                    .filter(book -> book.getStatus().equals(BookStatus.ISSUED.name()))
-                    .collect(Collectors.toList());
-            if (!bookReturnList.isEmpty()) {
-                return new ResponseEntity<>(bookReturnList, HttpStatus.OK);
+            List<IssueReturnDetails> issueReturnDetailsList = bookIssueService.getAllIssueBook();
+            if (!issueReturnDetailsList.isEmpty()) {
+                return new ResponseEntity<>(issueReturnDetailsList, HttpStatus.OK);
             }
         } catch (Exception e) {
             log.error("Error while getting bookReturnList", e.getMessage());
@@ -113,7 +110,7 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+// issue a book from inventory whose status are Available
     @PostMapping("/issue-book")
     public ResponseEntity<?> issueBook(@RequestBody IssueReturnDetails issueReturnDetails) {
         try {
@@ -124,7 +121,7 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
+// delete a book from inventory
     @PostMapping("/delete-book")
     public ResponseEntity<?> deleteBook(@RequestBody Book book) {
         try {
@@ -134,7 +131,7 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+// to find a book by id
     @PostMapping("/get-book")
     public ResponseEntity<?> getBookById(@RequestBody Book book) {
         try {
@@ -145,6 +142,7 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    // to return list of user as lit of reference for selection
     @GetMapping("/user")
     public ResponseEntity<?>getAllUser(){
         try {
@@ -155,6 +153,7 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    // to return user list as reference list for selection
     @GetMapping("/all-book")
     public ResponseEntity<?>getAllBooks(){
         try {
@@ -165,7 +164,7 @@ public class BookEntryController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+// to return  issue-return-detail on the basis of id for performing return operation
     @PostMapping("/return-book")
     public ResponseEntity<?> getBook(@RequestBody IssueReturnDetails issueReturnDetails){
         try {
