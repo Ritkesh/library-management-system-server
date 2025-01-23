@@ -8,7 +8,6 @@ import com.management.library.library_management.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +33,7 @@ public class PublicController {
     private JwtUtil jwtUtil;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-
+// for user sign up
     @PostMapping("/signup")
     public ResponseEntity<?>signUp(@RequestBody User user){
         try {
@@ -44,6 +43,7 @@ public class PublicController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    // for user login
     @PostMapping("/login")
     public ResponseEntity<?>logIn(@RequestBody User user){
         try {
