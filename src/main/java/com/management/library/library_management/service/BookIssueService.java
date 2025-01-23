@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Component
 public class BookIssueService {
@@ -34,6 +36,12 @@ public class BookIssueService {
         log.info("Book status updated to: {}", book.getStatus());
         bookService.saveBook(book);
         log.info("Book updated successfully with ID: {}", book.getId());
+    }
+
+    public List<IssueReturnDetails> getAllIssueBook(){
+        return bookIssueRepository.findAll().stream()
+                .filter(book-> book.getActualReturnDate()==null)
+                .toList();
     }
 
 }
