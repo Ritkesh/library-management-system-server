@@ -58,8 +58,9 @@ public class BookService {
                 .map(book -> new Reference( book.getId(),book.getName()))
                 .toList();
     }
+    
     public IssueReturnDetails getIssuedBookById(Integer id) {
         IssueReturnDetails issueReturnDetails =  bookIssueRepository.findById(id).orElse(null);
-        return null;
+        return issueReturnDetails;
     }
 }
