@@ -44,9 +44,9 @@ public class BookService {
 
     public List<Book> searchBooks(String bookName, String authorName) {
         if (bookName != null && authorName != null) {
-            return bookRepository.findByBookNameContainingIgnoreCaseAndAuthorNameContainingIgnoreCase(bookName.trim(), authorName.trim());
+            return bookRepository.findByNameContainingIgnoreCaseAndAuthorNameContainingIgnoreCase(bookName.trim(), authorName.trim());
         } else if (bookName != null) {
-            return bookRepository.findByBookNameContainingIgnoreCase(bookName.trim());
+            return bookRepository.findByNameContainingIgnoreCase(bookName.trim());
         } else if (authorName != null) {
             return bookRepository.findByAuthorNameContainingIgnoreCase(authorName.trim());
         }
@@ -55,7 +55,7 @@ public class BookService {
     public List<Reference> getBookList() {
         return bookRepository.findAll().stream()
                 .filter(book -> book.getStatus().equals(BookStatus.AVAILABLE.name()))
-                .map(book -> new Reference( book.getId(),book.getBookName()))
+                .map(book -> new Reference( book.getId(),book.getName()))
                 .toList();
     }
     public IssueReturnDetails getIssuedBookById(Integer id) {

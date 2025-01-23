@@ -44,11 +44,11 @@ public class UserService {
 
     }
     public User findUserByUserName(String name){
-        return userRepository.findByuserName(name);
+        return userRepository.findByName(name);
     }
     public List<Reference> findALlUser(){
         return userRepository.findAll().stream()
-                .map(user->new Reference(user.getId(),user.getUserName()))
+                .map(user->new Reference(user.getId(),user.getName()))
                 .toList();
     }
 }

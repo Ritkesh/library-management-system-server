@@ -48,11 +48,11 @@ public class PublicController {
     public ResponseEntity<?>logIn(@RequestBody User user){
         try {
             Map<String,String> response = new HashMap<>();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword()));
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserName());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getName(),user.getPassword()));
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getName());
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
             response.put("token",jwt);
-            User userObj = userService.findUserByUserName(user.getUserName());
+            User userObj = userService.findUserByUserName(user.getName());
             if(userObj.getRoles()!=null && !(userObj.getRoles().isEmpty()) && userObj.getRoles().contains(UserRole.ADMIN.name())){
                 response.put("role",UserRole.ADMIN.name());
             }

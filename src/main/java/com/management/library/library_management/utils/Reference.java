@@ -5,9 +5,9 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Reference {
-    @Column(insertable = false, updatable = false)
+    @Column(name = "id",insertable=false, updatable=false)
     private Integer id;
-    @Column(insertable = false, updatable = false)
+    @Column(name = "name",insertable=false, updatable=false)
     private String name;
 
     public Reference(Integer id, String name) {
